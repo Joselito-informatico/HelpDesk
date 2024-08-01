@@ -1,0 +1,5 @@
+tm: tabla mantenedor
+td:tabla detalle
+
+Detalles de base de datos:
+

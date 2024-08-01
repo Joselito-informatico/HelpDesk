@@ -1,0 +1,66 @@
+CÓDIGO CONEXION.PHP VIEJO:
+
+<?php
+    session_start();
+
+    class Conectar{
+        protected $dbh;
+
+        protected function Conexion(){
+            try {
+				$conectar = $this->dbh = new PDO("mysql:local=localhost;dbname=helpdesk_bd","root","");
+				return $conectar;	
+			} catch (Exception $e) {
+				print "¡Error BD!: " . $e->getMessage() . "<br/>";
+				die();	
+			}
+        }
+
+        public function set_names(){	
+            return $this->dbh->query("SET NAMES 'utf8'");
+        }
+
+        public function ruta(){
+            return "http://localhost:80/HelpDesk/";
+        }
+    }
+?>
+
+//////////////////////////////////////////////////////////////////////////
+
+CÓDIGO CONEXION.PHP MEJORADO:
+
+<?php
+session_start();
+
+class Conectar
+{
+    private $dbh;
+
+    public function conexion()
+    {
+        try {
+            $dsn = "mysql:host=localhost;dbname=helpdesk_bd";
+            $username = "root";
+            $password = "";
+            $this->dbh = new PDO($dsn, $username, $password);
+            $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // Manejo de errores
+            return $this->dbh;
+        } catch (PDOException $e) {
+            // Registrar el error en un archivo de log
+            error_log("Error de conexión a la base de datos: " . $e->getMessage(), 3, "error.log");
+            die("Error al conectar a la base de datos.");
+        }
+    }
+
+    public function set_names()
+    {
+        $this->dbh->query("SET NAMES 'utf8'");
+    }
+
+    public function ruta()
+    {
+        return "http://localhost:80/HelpDesk/";
+    }
+}
+?>
